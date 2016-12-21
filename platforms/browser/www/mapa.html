@@ -9,6 +9,7 @@
 		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 		 <!-- Compiled and minified JavaScript -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtnkH2M1ai2yKt-B5g-8-0UN24Uw6EofI"></script>
 	    <meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -134,7 +135,11 @@
 		 $(".button-collapse").sideNav();
 		 	function showGaragem(marker){
 	       		marker.addListener('click', function() {
-	       			lastMarkClicked = this;
+	       			if (lastMarkClicked) {
+	       				lastMarkClicked.setIcon('./mapa/markGaragem_off.png');
+	       			}else{
+	       				lastMarkClicked = this;
+	       			}
 	       			$('.dono').addClass('show');
 	       			$('#js-morador-nome').text(this.get('dono'));
 	       			$('#js-morador-img').prop('src', this.get('img'));
@@ -163,7 +168,7 @@
 		 		garagens.map(function(garagem){
 		 			var marker = new google.maps.Marker({
 		       		    position: garagem.pos,
-		       		    map: map,
+		       		    setMap: map,
 		       		    icon:'./mapa/markGaragem.png'
 		       		    ,dono: garagem.dono
 		       		    ,stars: garagem.stars
@@ -176,30 +181,13 @@
 		 		})
 		 	}
 
-		 	function initMap() {
-		         // Create a map object and specify the DOM element for display.
-		         map = new google.maps.Map(document.getElementById('map'), {
-		           center: {lat: -23.7439486, lng: -46.6650551 },
-		           zoom: 12,
-		           disableDefaultUI: true
 
-		         });
-		         mockGaragens();
 
-		         map.addListener('mouseup', function() {
-		             $('.dono').removeClass('show');
-		             lastMarkClicked.setIcon('./mapa/markGaragem_off.png');
-	           	});
-		         map.addListener('zoom_changed', function() {
-		             $('.dono').removeClass('show');
-		             lastMarkClicked.setIcon('./mapa/markGaragem_off.png');
-	           	});
-	       	}
 	       	function definePos(position) {
 	       		var gpsLoc = {lat:-23.7260785,lng:-46.6859566};
 	       		var marker = new google.maps.Marker({
 	       		    position: gpsLoc,
-	       		    map: map,
+	       		     setMap: map,
 	       		    icon:'./mapa/gps.png'
 	       		  });
 
@@ -207,13 +195,41 @@
 	       		map.setZoom(13);
 	       	}
 
-	       	(function getLocation() {
-	       	    if (navigator.geolocation) {
-	       	        navigator.geolocation.getCurrentPosition(definePos);
+	       	
+	       	function onDeviceReady() {
+    	         // Create a map object and specify the DOM element for display.
+    	         map = new google.maps.Map(document.getElementById('map'), {
+    	           center: {lat: -23.7439486, lng: -46.6650551 },
+    	           zoom: 12,
+    	           disableDefaultUI: true
+
+    	         });
+
+    	         mockGaragens();
+
+    	         map.addListener('mouseup', function() {
+    	             $('.dono').removeClass('show');
+    	             if (typeof lastMarkClicked != "undefined") {
+    	             	lastMarkClicked.setIcon('./mapa/markGaragem_off.png');
+    	             };
+               	});
+    	         map.addListener('zoom_changed', function() {
+    	             $('.dono').removeClass('show');
+    	             if (typeof lastMarkClicked != "undefined") {
+    	             	lastMarkClicked.setIcon('./mapa/markGaragem_off.png');
+    	             };
+               	});
+    	         
+ 	       	    if (navigator.geolocation) {
+ 	       	        navigator.geolocation.getCurrentPosition(definePos);
+ 	       	    }
+	       	}
+	       	if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+	       	        document.addEventListener("deviceready", onDeviceReady, false);
+	       	    } else {
+	       	        onDeviceReady();
 	       	    }
-	       	})()
 		</script>
-		<script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
-		    async defer></script>
+		
 	</body>
 </html>
