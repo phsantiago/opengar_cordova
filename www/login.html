@@ -68,6 +68,8 @@
 			}
 			.logo{
 				width: 150px;
+		        position: relative;
+				transition: linear 200ms;
 			}
 			label{
 				color: #dadada !important;
@@ -76,8 +78,9 @@
 				width: 100%;
 				background-color: #54abee;
 			}
-			form{
-				margin-top: 65%;
+			form {
+			    position: absolute;
+			    bottom: 0;
 			}
 			.btn:hover, .btn-large:hover {
 			    background-color: #54abee;
@@ -88,6 +91,12 @@
 			input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
 			    border-bottom: 1px solid #54abee;
 			    box-shadow: 0 1px 0 0 #54abee;
+			}
+			@media screen and ( max-height: 470px ){
+			    .logo {
+			        width: 90px;
+			        top: -40px;
+			    }
 			}
 		</style>
 		<div id="form" class="app">
