@@ -67,8 +67,16 @@
 				font-size: 20px;
 				color: #006064;
 			}
-			.asjdhaskjdh{
-				    justify-content: center;
+			.center{
+			    justify-content: center;
+			}
+			.geo{
+				position: absolute;
+				right: 15px;
+				top: 15px;
+			}
+			.geo i{
+			    font-size: 50px;
 			}
 		</style>
 		<div class="navbar-fixed">
@@ -77,7 +85,7 @@
 		      <li><a href="#!">EyeBom Design & Solutions</a></li>
 		      <li><a href="#!">EyeClo</a></li>
 		    </ul>
-		    <div class="nav-wrapper azul darken-4"> <a href="#" class="brand-logo center">NuPark</a> <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+		    <div class="nav-wrapper azul darken-4"> <a href="#" class="brand-logo center">OpenGar</a> <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 
 		      <ul id="mobile-demo" class="side-nav">
 		        <li class="no-padding">
@@ -109,10 +117,16 @@
 				<div class="img-morador">
 					<img src="" class="circle" id="js-morador-img" alt="">
 				</div>
+				<a href="" id="js-geo-intent" class="geo ">
+					<i class="material-icons">near_me</i>
+				</a>
 				<div id="js-stars"></div>
 				<h4 id="js-morador-nome"></h4>
-				<div class="valign-wrapper asjdhaskjdh">	
-					<i class="material-icons telic">phone</i><span class="tel" id="js-tel"></span>
+				<div class="valign-wrapper center">	
+					<i class="material-icons telic">phone</i>
+					<a id="js-tel-intent" href="">
+						<span class="tel" id="js-tel"></span>
+					</a>
 				</div>
 			</div>
 		</div>
@@ -120,12 +134,15 @@
 		 $(".button-collapse").sideNav();
 		 	function showGaragem(marker){
 	       		marker.addListener('click', function() {
+	       			lastMarkClicked = this;
 	       			$('.dono').addClass('show');
 	       			$('#js-morador-nome').text(this.get('dono'));
 	       			$('#js-morador-img').prop('src', this.get('img'));
 	       			$('#js-morador-desc').text(this.get('desc'));
 	       			$('#js-tel').text(this.get('tel'));
+	       			$('#js-tel-intent').attr('href', 'tel:'+this.get('tel'));
 	       			$('#js-stars').html('');
+	       			$('#js-geo-intent').attr('href','geo:'+this.getPosition().lat()+','+this.getPosition().lng());
 		       		for (var i = 0; i < 5; i++) {
 	       				if (this.get('stars') > i) {
 	       					$('#js-stars').append('<i class="material-icons">star</i>');
@@ -171,9 +188,11 @@
 
 		         map.addListener('mouseup', function() {
 		             $('.dono').removeClass('show');
+		             lastMarkClicked.setIcon('./mapa/markGaragem_off.png');
 	           	});
 		         map.addListener('zoom_changed', function() {
 		             $('.dono').removeClass('show');
+		             lastMarkClicked.setIcon('./mapa/markGaragem_off.png');
 	           	});
 	       	}
 	       	function definePos(position) {

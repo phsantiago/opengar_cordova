@@ -67,8 +67,16 @@
 				font-size: 20px;
 				color: #006064;
 			}
-			.asjdhaskjdh{
-				    justify-content: center;
+			.center{
+			    justify-content: center;
+			}
+			.geo{
+				position: absolute;
+				right: 15px;
+				top: 15px;
+			}
+			.geo i{
+			    font-size: 50px;
 			}
 		</style>
 		<div class="navbar-fixed">
@@ -109,9 +117,12 @@
 				<div class="img-morador">
 					<img src="" class="circle" id="js-morador-img" alt="">
 				</div>
+				<a href="" id="js-geo-intent" class="geo ">
+					<i class="material-icons">near_me</i>
+				</a>
 				<div id="js-stars"></div>
 				<h4 id="js-morador-nome"></h4>
-				<div class="valign-wrapper asjdhaskjdh">	
+				<div class="valign-wrapper center">	
 					<i class="material-icons telic">phone</i>
 					<a id="js-tel-intent" href="">
 						<span class="tel" id="js-tel"></span>
@@ -123,6 +134,9 @@
 		 $(".button-collapse").sideNav();
 		 	function showGaragem(marker){
 	       		marker.addListener('click', function() {
+	       			if (lastMarkClicked) {
+	       				lastMarkClicked.setIcon('./mapa/markGaragem_off.png');
+	       			};
 	       			lastMarkClicked = this;
 	       			$('.dono').addClass('show');
 	       			$('#js-morador-nome').text(this.get('dono'));
@@ -131,6 +145,7 @@
 	       			$('#js-tel').text(this.get('tel'));
 	       			$('#js-tel-intent').attr('href', 'tel:'+this.get('tel'));
 	       			$('#js-stars').html('');
+	       			$('#js-geo-intent').attr('href','geo:'+this.getPosition().lat()+','+this.getPosition().lng());
 		       		for (var i = 0; i < 5; i++) {
 	       				if (this.get('stars') > i) {
 	       					$('#js-stars').append('<i class="material-icons">star</i>');
